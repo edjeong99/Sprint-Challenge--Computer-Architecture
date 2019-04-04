@@ -48,12 +48,12 @@ void cpu_load(struct cpu *cpu, char *file)
     char *endptr;
       unsigned char val = strtoul(line, &endptr, 2);
           if(line == endptr){ // if there is no binary num in line
-         printf("Skipping : %s\n", line);
+      //   printf("Skipping : %s\n", line);
          continue;
        }
        cpu->ram[address] = val ;
        if(line == endptr){
-         printf("Skipping : %s\n", line);
+      //   printf("Skipping : %s\n", line);
          continue;
        }
     //    printf ("ram: %x\n",cpu->ram[address]);
@@ -86,6 +86,7 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
    //    printf("ADD reg %d and reg %d result = %d\n",regA, regB, cpu->registers[regA] );
       break;
 
+// compare two values in register and set FLAG register accordingly
     case CMP:
       if(cpu->registers[regA] == cpu->registers[regB]){
           cpu->FL =  0b00000001;
@@ -98,7 +99,7 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
         // set the Less-than L flag to 1, otherwise set it to 0
          cpu->FL =  0b00000100;
       }
-       printf("CMP flag is = %x\n",cpu->FL );
+    //   printf("CMP flag is = %x\n",cpu->FL );
       break;
   
     
@@ -113,7 +114,7 @@ void handle_LDI(struct cpu *cpu, unsigned char operandA, unsigned char operandB,
     cpu->PC += 1 + num_operands;
 }
 void handle_PRN(struct cpu *cpu, unsigned char operandA,  unsigned char num_operands) { 
-    printf("PRN %d\n",  cpu->registers[operandA]);
+    printf("%d\n",  cpu->registers[operandA]);
     cpu->PC += 1 + num_operands;
 }
 
@@ -194,7 +195,7 @@ void cpu_run(struct cpu *cpu)
 
     else{ // if it's not alu operation
     // 4. switch() over it to decide on a course of action.
-        printf("IR is %d\n", IR);
+      //  printf("IR is %d\n", IR);
         switch (IR) {
 
     // 5. Do whatever the instruction should do according to the spec.
@@ -236,33 +237,33 @@ void cpu_run(struct cpu *cpu)
           // RET set PC to where stack pops
           case RET:
             cpu->PC = handle_POP(cpu, num_operands);   
-            printf("RET  cpu->PC = %d\n", cpu->PC);     
+        //    printf("RET  cpu->PC = %d\n", cpu->PC);     
             break;
 
           case JMP:
             cpu->PC = cpu->registers[operandA];   
-            printf("JMP  cpu->PC = %d\n", cpu->PC);     
+         //   printf("JMP  cpu->PC = %d\n", cpu->PC);     
             break;
 
           case JEQ:
             if(cpu->FL & 0b00000001 ){ // if equal flag is true
               cpu->PC = cpu->registers[operandA];   
-              printf("JEQ EQUAL  cpu->PC = %d\n", cpu->PC);     
+         //     printf("JEQ EQUAL  cpu->PC = %d\n", cpu->PC);     
             }  
             else{
               cpu->PC += 1 + num_operands;
-               printf("JEQ NOT EQUAL  cpu->PC = %d\n", cpu->PC);
+          //     printf("JEQ NOT EQUAL  cpu->PC = %d\n", cpu->PC);
             }
             break;
 
           case JNE:
             if(!(cpu->FL & 0b00000001) ){ // if equal flag is false
               cpu->PC = cpu->registers[operandA];   
-              printf("JNE worked cpu->PC = %d\n", cpu->PC);     
+          //    printf("JNE worked cpu->PC = %d\n", cpu->PC);     
             }
              else{
               cpu->PC += 1 + num_operands;
-               printf("JNE NOT worked  cpu->PC = %d\n", cpu->PC);
+          //     printf("JNE NOT worked  cpu->PC = %d\n", cpu->PC);
             }
             break;
 
