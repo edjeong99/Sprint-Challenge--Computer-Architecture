@@ -85,6 +85,22 @@ void alu(struct cpu *cpu, enum alu_op op, unsigned char regA, unsigned char regB
       cpu->registers[regA] = cpu->registers[regA] + cpu->registers[regB];
    //    printf("ADD reg %d and reg %d result = %d\n",regA, regB, cpu->registers[regA] );
       break;
+
+    case CMP:
+      if(cpu->registers[regA] == cpu->registers[regB]){
+          cpu->FL =  0b00000001;
+      }
+      if(cpu->registers[regA] > cpu->registers[regB]){
+        //set the Greater-than G flag to 1, otherwise set it to 0
+        cpu->FL =  0b00000010;
+      }
+      if(cpu->registers[regA] < cpu->registers[regB]){
+        // set the Less-than L flag to 1, otherwise set it to 0
+         cpu->FL =  0b00000100;
+      }
+       printf("CMP flag is = %x\n",cpu->FL );
+      break;
+  
     
   }
 }

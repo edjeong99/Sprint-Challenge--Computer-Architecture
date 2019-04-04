@@ -5,9 +5,9 @@
 struct cpu {
   // TODO
   // PC
-  unsigned char PC;
+  unsigned char PC; // program counter register
   //unsigned char SP; // points to stack. R7 is reserved?
-
+  unsigned char FL;  // flag register
   // registers (array)
   unsigned char registers[8];
   // ram (array)
@@ -37,7 +37,7 @@ enum alu_op {
 #define CALL 0b01010000 
 #define RET  0b00010001
 #define ADD  0b10100000 
-
+#define CMP  0b10100111 
 // Function declarations
 
 extern void cpu_load(struct cpu *cpu, char *file);
