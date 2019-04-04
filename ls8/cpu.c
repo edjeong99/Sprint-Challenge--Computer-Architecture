@@ -113,7 +113,7 @@ void handle_LDI(struct cpu *cpu, unsigned char operandA, unsigned char operandB,
     cpu->PC += 1 + num_operands;
 }
 void handle_PRN(struct cpu *cpu, unsigned char operandA,  unsigned char num_operands) { 
-   // printf("PRN %d\n",  cpu->registers[operandA]);
+    printf("PRN %d\n",  cpu->registers[operandA]);
     cpu->PC += 1 + num_operands;
 }
 
@@ -239,7 +239,34 @@ void cpu_run(struct cpu *cpu)
             printf("RET  cpu->PC = %d\n", cpu->PC);     
             break;
 
-            default:
+          case JMP:
+            cpu->PC = cpu->registers[operandA];   
+            printf("JMP  cpu->PC = %d\n", cpu->PC);     
+            break;
+
+          case JEQ:
+            if(cpu->FL & 0b00000001 ){ // if equal flag is true
+              cpu->PC = cpu->registers[operandA];   
+              printf("JEQ EQUAL  cpu->PC = %d\n", cpu->PC);     
+            }  
+            else{
+              cpu->PC += 1 + num_operands;
+               printf("JEQ NOT EQUAL  cpu->PC = %d\n", cpu->PC);
+            }
+            break;
+
+          case JNE:
+            if(!(cpu->FL & 0b00000001) ){ // if equal flag is false
+              cpu->PC = cpu->registers[operandA];   
+              printf("JNE worked cpu->PC = %d\n", cpu->PC);     
+            }
+             else{
+              cpu->PC += 1 + num_operands;
+               printf("JNE NOT worked  cpu->PC = %d\n", cpu->PC);
+            }
+            break;
+
+          default:
                 printf("Unrecognized instruction\n");
                 exit(1);
                 break;
